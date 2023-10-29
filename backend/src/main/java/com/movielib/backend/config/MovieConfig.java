@@ -1,11 +1,13 @@
 package com.movielib.backend.config;
 
+import com.movielib.backend.model.Actor;
 import com.movielib.backend.model.Movie;
 import com.movielib.backend.repository.MovieRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -21,8 +23,8 @@ public class MovieConfig {
                             " and set out to investigate it. However, to their horror, they are attacked by" +
                             " an alien which later invades their ship.",
                     1979,
-                    8.5,
-                    "Ridley Scott"
+                    "Ridley Scott",
+                    new ArrayList<>(List.of(new Actor("Sigourney Weaver"), new Actor("Tom Skerritt"), new Actor("Veronica Cartwright")))
             );
 
             Movie movie2 = new Movie(
@@ -32,8 +34,8 @@ public class MovieConfig {
                             "to his youngest son, Michael. However, his decision unintentionally puts the " +
                             "lives of his loved ones in grave danger.",
                     1972,
-                    9.2,
-                    "Francis Ford Coppola"
+                    "Francis Ford Coppola",
+                    new ArrayList<>(List.of(new Actor("Al Pacino"), new Actor("Marlon Brando"), new Actor("James Caan")))
             );
 
             repository.saveAll(
