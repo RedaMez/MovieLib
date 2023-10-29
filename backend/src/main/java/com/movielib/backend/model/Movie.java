@@ -22,12 +22,19 @@ public class Movie {
     private long id;
     @Column(name = "title")
     private String title;
-    @Column(name = "category")
+    /*@Column(name = "category")
     @JoinTable(
             name = "categories",
-            joinColumns = @JoinColumn(name = "name")
+            joinColumns = @JoinColumn(name = "category_id")
+    )*/
+    @ManyToOne(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
     )
-    private String category;
+    @JoinColumn(name = "category")
+    private Category category;
     @Column(name = "summary")
     private String summary;
     @Column(name = "release_date")
@@ -36,14 +43,24 @@ public class Movie {
     private double rating;
     @Column(name = "director")
     private String director;
-    @ManyToMany
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinTable(
             name = "movies_actor",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private List<Actor> actors;
-    @ManyToMany
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinTable(
             name = "movies_reviews",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -51,13 +68,13 @@ public class Movie {
     )
     private List<Review> reviews;
 
-    public Movie(long id, String title, String category, String summary, int releaseDate, String director, List<Actor> actors) {
+    public Movie(long id, String title, Category category, String summary, int releaseDate, String director, List<Actor> actors) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = 0.0;
+        this.rating = .0;
         this.director = director;
         this.actors = actors;
     }
@@ -65,12 +82,12 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String title, String category, String summary, int releaseDate, String director, List<Actor> actors) {
+    public Movie(String title, Category category, String summary, int releaseDate, String director, List<Actor> actors) {
         this.title = title;
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = 0.0;
+        this.rating = .0;
         this.director = director;
         this.actors = actors;
     }
@@ -91,7 +108,17 @@ public class Movie {
         return releaseDate;
     }
 
-    public double getRating() {
+    /*public double getRating() {
+        double avg = 1.;
+        if(!reviews.isEmpty()){
+            for(Review r: reviews){
+                avg *= r.getRating();
+            }
+        }
+        return rating = avg;
+    }*/
+
+    public double getRating(){
         return rating;
     }
 
@@ -103,16 +130,16 @@ public class Movie {
         this.rating = rating;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
-    }
-
-    public void addActor(Actor actor){
-        actors.add(actor);
     }
 
     public void addReview(Review review){
         reviews.add(review);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
     }
 
     public List<Actor> getActors() {
@@ -121,5 +148,29 @@ public class Movie {
 
     public List<Review> getReviews() {
         return reviews;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setReleaseDate(int releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
     }
 }
