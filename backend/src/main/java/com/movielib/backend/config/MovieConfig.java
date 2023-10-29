@@ -1,6 +1,7 @@
 package com.movielib.backend.config;
 
 import com.movielib.backend.model.Actor;
+import com.movielib.backend.model.Category;
 import com.movielib.backend.model.Movie;
 import com.movielib.backend.repository.MovieRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +19,7 @@ public class MovieConfig {
         return args -> {
             Movie movie1 = new Movie(
                     "Alien",
-                    "SF",
+                    new Category("SF"),
                     "The crew of a spacecraft, Nostromo, intercept a distress signal from a planet" +
                             " and set out to investigate it. However, to their horror, they are attacked by" +
                             " an alien which later invades their ship.",
@@ -29,7 +30,7 @@ public class MovieConfig {
 
             Movie movie2 = new Movie(
                     "The godfather",
-                    "Drama",
+                    new Category("Drama"),
                     "Don Vito Corleone, head of a mafia family, decides to hand over his empire " +
                             "to his youngest son, Michael. However, his decision unintentionally puts the " +
                             "lives of his loved ones in grave danger.",
