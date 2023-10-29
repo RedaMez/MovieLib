@@ -2,6 +2,7 @@ package com.movielib.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,35 +43,37 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private Set<Actor> actors;
+    private List<Actor> actors;
     @ManyToMany
     @JoinTable(
             name = "movies_reviews",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id")
     )
-    private Set<Review> reviews;
+    private List<Review> reviews;
 
-    public Movie(long id, String title, String category, String summary, int releaseDate, double rating, String director) {
+    public Movie(long id, String title, String category, String summary, int releaseDate, String director, List<Actor> actors) {
         this.id = id;
         this.title = title;
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = rating;
+        this.rating = 0.0;
         this.director = director;
+        this.actors = actors;
     }
 
     public Movie() {
     }
 
-    public Movie(String title, String category, String summary, int releaseDate, double rating, String director) {
+    public Movie(String title, String category, String summary, int releaseDate, String director, List<Actor> actors) {
         this.title = title;
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = rating;
+        this.rating = 0.0;
         this.director = director;
+        this.actors = actors;
     }
 
     public long getId() {
@@ -113,11 +116,11 @@ public class Movie {
         reviews.add(review);
     }
 
-    public Set<Actor> getActors() {
+    public List<Actor> getActors() {
         return actors;
     }
 
-    public Set<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 }
