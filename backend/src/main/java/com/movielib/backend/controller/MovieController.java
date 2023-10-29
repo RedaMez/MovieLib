@@ -3,9 +3,7 @@ package com.movielib.backend.controller;
 import com.movielib.backend.model.Movie;
 import com.movielib.backend.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,23 @@ public class MovieController {
     @GetMapping
     public List<Movie> getMovie(){
         return movieService.getMovie();
+    }
+
+    @PostMapping
+    public void registerNewMovie(@RequestBody Movie movie){
+        movieService.addNewMovie(movie);
+    }
+
+    @DeleteMapping(path = "{movieId}")
+    public void deleteMovie(@PathVariable("movieId") Long movieId){
+        movieService.deleteMovie(movieId);
+    }
+
+    @PutMapping(path = "{movieId}")
+    public void updateMovie(
+            @PathVariable("movieId") long movieId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String summary){
+        movieService.updateMovie(movieId, title, summary);
     }
 }
