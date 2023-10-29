@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS movielib CASCADE;
 DROP TABLE IF EXISTS movies CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS actors CASCADE;
@@ -9,6 +10,8 @@ DROP SEQUENCE IF EXISTS categories_category_id_seq;
 DROP SEQUENCE IF EXISTS movies_movie_id_seq;
 DROP SEQUENCE IF EXISTS reviews_review_id_seq;
 DROP SEQUENCE IF EXISTS users_user_id_seq ;
+
+CREATE DATABASE movielib;
 
 CREATE TABLE categories (
     category_id serial PRIMARY KEY,
