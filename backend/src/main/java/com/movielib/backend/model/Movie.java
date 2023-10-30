@@ -3,6 +3,7 @@ package com.movielib.backend.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "movies")
@@ -22,11 +23,6 @@ public class Movie {
     private long id;
     @Column(name = "title")
     private String title;
-    /*@Column(name = "category")
-    @JoinTable(
-            name = "categories",
-            joinColumns = @JoinColumn(name = "category_id")
-    )*/
     @ManyToOne(
             cascade = {
                     CascadeType.PERSIST,
@@ -172,5 +168,15 @@ public class Movie {
 
     public void setActors(List<Actor> actors) {
         this.actors = actors;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o)
+            return true;
+        if(o == null || getClass() != o.getClass())
+            return false;
+        Movie m = (Movie) o;
+        return Objects.equals(this.title, m.title) && Objects.equals(this.director, m.director);
     }
 }

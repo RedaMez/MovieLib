@@ -2,6 +2,8 @@ package com.movielib.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -36,9 +38,9 @@ public class Review {
     @Column(name = "comment")
     private String comment;
 
-    public Review(long id, long user, long movieId, double rating, String comment) {
+    public Review(long id, long user_id, long movieId, double rating, String comment) {
         this.id = id;
-        this.user_id = user;
+        this.user_id = user_id;
         this.movie_id = movieId;
         this.rating = rating;
         this.comment = comment;
@@ -72,5 +74,16 @@ public class Review {
 
     public String getComment() {
         return comment;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o)
+            return true;
+        if(o == null || getClass() != o.getClass())
+            return false;
+        Review r = (Review) o;
+        return  Objects.equals(this.user_id, r.user_id) &&
+                Objects.equals(this.movie_id, r.movie_id);
     }
 }

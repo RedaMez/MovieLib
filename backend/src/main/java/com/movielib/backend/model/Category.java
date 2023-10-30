@@ -2,6 +2,8 @@ package com.movielib.backend.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -39,5 +41,15 @@ public class Category {
 
     public long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o)
+            return true;
+        if(o == null || getClass() != o.getClass())
+            return false;
+        Category c = (Category) o;
+        return Objects.equals(this.name, c.name);
     }
 }
