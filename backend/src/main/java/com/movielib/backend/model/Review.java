@@ -1,10 +1,14 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 @Entity
+@Builder
 @Table(name = "reviews")
 public class Review {
 
@@ -54,26 +58,6 @@ public class Review {
         this.movie_id = movie_id;
         this.rating = rating;
         this.comment = comment;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public long getUser_id() {
-        return user_id;
-    }
-
-    public long getMovie_id() {
-        return movie_id;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     @Override

@@ -1,11 +1,17 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
 @Table(name = "movies")
 public class Movie {
 
@@ -88,22 +94,6 @@ public class Movie {
         this.actors = actors;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public int getReleaseDate() {
-        return releaseDate;
-    }
-
     /*public double getRating() {
         double avg = 1.;
         if(!reviews.isEmpty()){
@@ -114,20 +104,8 @@ public class Movie {
         return rating = avg;
     }*/
 
-    public double getRating(){
-        return rating;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    public Category getCategory() {
-        return category;
     }
 
     public void addReview(Review review){
@@ -136,14 +114,6 @@ public class Movie {
 
     public void removeReview(Review review){
         reviews.remove(review);
-    }
-
-    public List<Actor> getActors() {
-        return actors;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
     }
 
     public void setTitle(String title) {

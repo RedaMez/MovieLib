@@ -1,10 +1,14 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -41,22 +45,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setUsername(String username) {

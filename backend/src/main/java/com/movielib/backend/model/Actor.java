@@ -1,10 +1,14 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 @Entity
+@Builder
 @Table(name = "actors")
 public class Actor {
 
@@ -33,14 +37,6 @@ public class Actor {
 
     public Actor(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public long getId() {
-        return id;
     }
 
     @Override
