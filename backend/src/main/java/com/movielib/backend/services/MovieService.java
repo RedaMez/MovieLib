@@ -1,4 +1,4 @@
-package com.movielib.backend.service;
+package com.movielib.backend.services;
 
 import com.movielib.backend.model.Movie;
 import com.movielib.backend.repository.MovieRepository;
@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * {Service used by the controller to communicate with the view.}
- * It transforms the data from the model so that it fit the one used by the view.
- */
 @Service
 public class MovieService {
 
@@ -26,6 +22,23 @@ public class MovieService {
 
     public List<Movie> getMovie(){
         return movieRepository.findAll();
+    }
+
+    public Movie getMovieByTitle(String title) {
+        Optional<Movie> movieOptional = movieRepository
+                .findMovieByTitle(title);
+        if(movieOptional.isEmpty()){
+            throw new IllegalStateException("movie doesn't exists");
+        }
+        return movieOptional.get();
+    }
+
+    public List<Movie> getMovieOrderByReleaseDate() {
+        return movieRepository.findAllByOrderByReleaseDateDesc();
+    }
+
+    public List<Movie> getMovieOrderByRating() {
+        return movieRepository.findAllByOrderByRatingDesc();
     }
 
     public void addNewMovie(Movie movie) {
