@@ -3,10 +3,12 @@ package com.movielib.backend.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "actors")

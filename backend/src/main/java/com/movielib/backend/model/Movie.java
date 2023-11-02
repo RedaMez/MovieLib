@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @Table(name = "movies")
 public class Movie {
@@ -42,7 +45,7 @@ public class Movie {
     @Column(name = "release_date")
     private int releaseDate;
     @Column(name = "rating")
-    private double rating;
+    private double rating = 1.;
     @Column(name = "director")
     private String director;
     @ManyToMany(
@@ -76,7 +79,6 @@ public class Movie {
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = .0;
         this.director = director;
         this.actors = actors;
     }
@@ -89,7 +91,6 @@ public class Movie {
         this.category = category;
         this.summary = summary;
         this.releaseDate = releaseDate;
-        this.rating = .0;
         this.director = director;
         this.actors = actors;
     }
@@ -104,19 +105,24 @@ public class Movie {
         return rating = avg;
     }*/
 
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
     public void addReview(Review review){
         reviews.add(review);
+        updateRating();
+    }
+
+    private void updateRating() {
+        double avg_rating = 1.;
+        for(Review r:reviews){
+            avg_rating *= r.getRating();
+        }
+        this.rating = avg_rating / reviews.size();
     }
 
     public void removeReview(Review review){
         reviews.remove(review);
     }
 
-    public void setTitle(String title) {
+    /*public void setTitle(String title) {
         this.title = title;
     }
 
@@ -126,6 +132,10 @@ public class Movie {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public void setReleaseDate(int releaseDate) {
@@ -138,7 +148,7 @@ public class Movie {
 
     public void setActors(List<Actor> actors) {
         this.actors = actors;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o){

@@ -3,10 +3,12 @@ package com.movielib.backend.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "reviews")
@@ -30,22 +32,22 @@ public class Review {
             name = "users",
             joinColumns = @JoinColumn(name = "user_id")
     )
-    private long user_id;
+    private long userId;
     @Column(name = "movie_id")
     @JoinTable(
             name = "movies",
             joinColumns = @JoinColumn(name = "movie_id")
     )
-    private long movie_id;
+    private long movieId;
     @Column(name = "rating")
     private double rating;
     @Column(name = "comment")
     private String comment;
 
-    public Review(long id, long user_id, long movieId, double rating, String comment) {
+    public Review(long id, long userId, long movieId, double rating, String comment) {
         this.id = id;
-        this.user_id = user_id;
-        this.movie_id = movieId;
+        this.userId = userId;
+        this.movieId = movieId;
         this.rating = rating;
         this.comment = comment;
     }
@@ -53,9 +55,9 @@ public class Review {
     public Review() {
     }
 
-    public Review(long user_id, long movie_id, double rating, String comment) {
-        this.user_id = user_id;
-        this.movie_id = movie_id;
+    public Review(long userId, long movieId, double rating, String comment) {
+        this.userId = userId;
+        this.movieId = movieId;
         this.rating = rating;
         this.comment = comment;
     }
@@ -67,7 +69,7 @@ public class Review {
         if(o == null || getClass() != o.getClass())
             return false;
         Review r = (Review) o;
-        return  Objects.equals(this.user_id, r.user_id) &&
-                Objects.equals(this.movie_id, r.movie_id);
+        return  Objects.equals(this.userId, r.userId) &&
+                Objects.equals(this.movieId, r.movieId);
     }
 }

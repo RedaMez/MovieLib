@@ -3,10 +3,12 @@ package com.movielib.backend.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @Table(name = "users")
@@ -47,7 +49,7 @@ public class User {
         this.password = password;
     }
 
-    public void setUsername(String username) {
+    /*public void setUsername(String username) {
         this.username = username;
     }
 
@@ -57,7 +59,7 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o){
