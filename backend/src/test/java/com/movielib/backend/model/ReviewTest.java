@@ -10,8 +10,8 @@ public class ReviewTest extends Assertions {
     @CsvSource({"013452, 453525, 5.8, bzeuifzfbebzfb", "6546, 546343, 10., feziuhfheu", "643375, 6754475, .0, bfeziuuibzfbeiz"})
     public void testReview(long user_id, long movie_id, double rating, String comment){
         Review r = new Review(user_id, movie_id, rating, comment);
-        assertEquals(user_id, r.getUser_id());
-        assertEquals(movie_id, r.getMovie_id());
+        assertEquals(user_id, r.getUserId());
+        assertEquals(movie_id, r.getMovieId());
         assertEquals(rating, r.getRating());
         assertEquals(comment, r.getComment());
     }
