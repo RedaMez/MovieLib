@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches:
+      -main
+  pull_request:
+    branches:
+      -main
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '20'
+
+      - name: Test back
+        run: mvn clean test
+
+      - name: Build back
+        run: mvn clean install
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar  # Spécifiez les fichiers à inclure dans la release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
