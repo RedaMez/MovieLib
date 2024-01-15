@@ -4,7 +4,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-MovieLab is a web application that allows users to search for their favorite films, 
+MovieLib is a web application that allows users to search for their favorite films, 
 view detailed movie summaries and write reviews.
 
 ### Built With
