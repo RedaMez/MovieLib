@@ -1,14 +1,19 @@
 package com.movielib.backend.controller;
 
+import com.movielib.backend.dto.MovieDTO;
 import com.movielib.backend.model.Movie;
 import com.movielib.backend.services.MovieService;
+//import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "api/movie")
+@Controller
 public class MovieController {
 
     private final MovieService movieService;
@@ -18,41 +23,86 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping("/list")
-    public List<Movie> getMovieList(){
-        return movieService.getMovie();
+    // List each movie by order of creation or modification
+    @GetMapping("/movies")
+    public String getMovieList(Model model){
+        List<MovieDTO> movies = movieService.findAllMovies();
+        model.addAttribute("movies", movies);
+        return "movies-list";
     }
 
-    @GetMapping("/{movieName}")
-    public Movie getMovieInformation(@PathVariable("movieName") String title){
-        return movieService.getMovieByTitle(title);
+    @GetMapping("/movies/order_by_release_date")
+    public String getMovieListOrderByReleaseDate(Model model){
+        List<MovieDTO> movies = movieService.findMovieOrderByReleaseDate();
+        model.addAttribute("movies", movies);
+        return "movies-list";
     }
 
-    @GetMapping("/order_by_release_date")
-    public List<Movie> getMovieListOrderByReleaseDate(){
-        return movieService.getMovieOrderByReleaseDate();
+    @GetMapping("/movies/order_by_rating")
+    public String getMovieListOrderByRating(Model model){
+        List<MovieDTO> movies = movieService.findMovieOrderByRating();
+        model.addAttribute("movies", movies);
+        return "movies-list";
     }
 
-    @GetMapping("/order_by_rating")
-    public List<Movie> getMovieListOrderByRating(){
-        return movieService.getMovieOrderByRating();
+    @GetMapping("/movies/{movieId}")
+    public String getMovieDetail(@PathVariable("movieId") long id, Model model){
+        MovieDTO movie = movieService.findMovieById(id);
+        model.addAttribute("movie", movie);
+        return "movies-detail";
     }
 
-    @PostMapping
-    public void registerNewMovie(@RequestBody Movie movie){
-        movieService.addNewMovie(movie);
+    @GetMapping("/movies/new")
+    public String createMovieForm(Model model){
+        Movie movie = Movie.builder().build();
+        model.addAttribute("movie", movie);
+        return "movies-create";
     }
 
-    @DeleteMapping(path = "/delete_{movieId}")
-    public void deleteMovie(@PathVariable("movieId") Long movieId){
+    @PostMapping("/movies/new")
+    public String saveMovie(@Valid @ModelAttribute("movie") MovieDTO movieDTO,
+                            BindingResult result,
+                            Model model){
+        if(result.hasErrors()){
+            model.addAttribute("movie", movieDTO);
+            return "movies-create";
+        }
+        movieService.saveMovie(movieDTO);
+        return "redirect:/movies";
+    }
+
+    @GetMapping("/movies/{movieId}/edit")
+    public String editMovieForm(@PathVariable("movieId") long movieId, Model model){
+        MovieDTO movie = movieService.findMovieById(movieId);
+        model.addAttribute("movie", movie);
+        return "movies-edit";
+    }
+
+    @PostMapping(path = "/movies/{movieId}/edit")
+    public String updateMovie(@PathVariable("movieId") long movieId,
+                              @Valid @ModelAttribute("movie") MovieDTO movie,
+                              Model model,
+                              BindingResult result){
+        if(result.hasErrors()) {
+            System.out.println("ERREUR ICI");
+            model.addAttribute("movie", movie);
+            return "movies-edit";
+        }
+        movie.setId(movieId);
+        movieService.updateMovie(movie);
+        return "redirect:/movies";
+    }
+
+    @GetMapping(path = "/movies/{movieId}/delete")
+    public String deleteMovie(@PathVariable("movieId") Long movieId){
         movieService.deleteMovie(movieId);
+        return "redirect:/movies";
     }
 
-    @PutMapping(path = "/update_{movieId}")
-    public void updateMovie(
-            @PathVariable("movieId") long movieId,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String summary){
-        movieService.updateMovie(movieId, title, summary);
+    @GetMapping("/movies/search")
+    public String searchMovie(@RequestParam(value = "query") String query, Model model){
+        List<MovieDTO> movies = movieService.searchMovies(query);
+        model.addAttribute("movies", movies);
+        return "movies-list";
     }
 }

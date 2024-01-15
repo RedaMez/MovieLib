@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Detail</title>
+</head>
+<body class="d-flex flex-column">
+  <section layout:fragment="body">
+    <header class="py-5 bg-light border-bottom mb-4">
+      <div class="container">
+        <div class="text-center my-5">
+          <h1 class="fw-bolder" th:text="${movie.title}"></h1>
+          <p class="lead mb-0" th:text="${movie.director}"></p>
+        </div>
+      </div>
+    </header>
+    <!-- Page content-->
+    <div class="container">
+      <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+          <!-- Featured blog post-->
+          <div class="card mb-4">
+            <a href="#!"><img class="card-img-top" th:src="${movie.imageUrl}" alt="..." /></a>
+            <div class="card-body">
+              <div class="small text-muted" th:text="${movie.releaseDate}"></div>
+              <h2 class="card-title">Summary</h2>
+              <p class="card-text" th:text="${movie.summary}"></p>
+              <a class="btn btn-primary" th:href="@{/reviews/{movieId}/new(movieId=${movie.id})}">Add A Review</a>
+              <a class="btn btn-primary" th:href="@{/movies/{movieId}/edit(movieId=${movie.id})}">Edit</a>
+              <a class="btn btn-primary" th:href="@{/movies/{movieId}/delete(movieId=${movie.id})}">Delete</a>
+            </div>
+          </div>
+          <!-- Nested row for non-featured blog posts-->
+          <div class="row">
+            <div class="col-lg-6">
+              <!-- Blog post-->
+              <div th:each="review : ${movie.reviews}" class="card mb-4">
+                <div class="card-body">
+                  <div class="small text-muted" th:text="${review.user.username}"></div>
+                  <h2 class="card-title h4" th:text="${review.rating}"></h2>
+                  <p class="card-text" th:text="${review.comment}"></p>
+                  <a class="btn btn-primary" th:href="@{/reviews/{reviewId}(reviewId=${review.id})}">Read more →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pagination-->
+          <nav aria-label="Pagination">
+            <hr class="my-0" />
+            <ul class="pagination justify-content-center my-4">
+              <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
+              <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+              <li class="page-item"><a class="page-link" href="#!">2</a></li>
+              <li class="page-item"><a class="page-link" href="#!">3</a></li>
+              <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+              <li class="page-item"><a class="page-link" href="#!">15</a></li>
+              <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-header">Search User Review</div>
+            <div class="card-body">
+              <div class="input-group">
+                <input class="form-control" type="text" placeholder="Enter username..." aria-label="Enter username..." aria-describedby="button-search" />
+                <button class="btn btn-primary" id="button-search" type="button">Search</button>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header">Category</div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <p class="card-text" th:text="${movie.category}"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header">Actors</div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <ul class="list-unstyled mb-0">
+                    <li th:each="actor, iterStat : *{movie.actors}" th:text="*{movie.actors[__${iterStat.index}__]}"></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header">Rating</div>
+              <div class="card-body">
+                <div class="star-rating" id="starRating">
+                  <span th:each="i : ${#numbers.sequence(1, 5)}"
+                        th:class="${(movie.rating + 0.5) >= i ? 'fa fa-star checked' : 'fa fa-star unchecked'}"></span>
+                  <span th:text="${movie.rating + ' / 5'}"></span>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,11 +1,10 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,96 +13,39 @@ import java.util.Objects;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "movies")
 public class Movie {
 
     @Id
-    @SequenceGenerator(
-            name = "movie_sequence",
-            sequenceName = "movie_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "movie_sequence"
-    )
-    @Column(name = "movie_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "title")
     private String title;
-    @ManyToOne(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
-    )
-    @JoinColumn(name = "category")
+    private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    @Column(name = "summary")
     private String summary;
-    @Column(name = "release_date")
     private int releaseDate;
-    @Column(name = "rating")
+    @Builder.Default
     private double rating = 1.;
-    @Column(name = "director")
     private String director;
-    @ManyToMany(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
-    )
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
-            name = "movies_actor",
+            name = "movies_actors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private List<Actor> actors;
-    @ManyToMany(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            }
+    private List<Actor> actors = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "movie",
+            cascade = CascadeType.REMOVE
     )
-    @JoinTable(
-            name = "movies_reviews",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "review_id")
-    )
-    private List<Review> reviews;
-
-    public Movie(long id, String title, Category category, String summary, int releaseDate, String director, List<Actor> actors) {
-        this.id = id;
-        this.title = title;
-        this.category = category;
-        this.summary = summary;
-        this.releaseDate = releaseDate;
-        this.director = director;
-        this.actors = actors;
-    }
-
-    public Movie() {
-    }
-
-    public Movie(String title, Category category, String summary, int releaseDate, String director, List<Actor> actors) {
-        this.title = title;
-        this.category = category;
-        this.summary = summary;
-        this.releaseDate = releaseDate;
-        this.director = director;
-        this.actors = actors;
-    }
-
-    /*public double getRating() {
-        double avg = 1.;
-        if(!reviews.isEmpty()){
-            for(Review r: reviews){
-                avg *= r.getRating();
-            }
-        }
-        return rating = avg;
-    }*/
+    private List<Review> reviews = new ArrayList<>();
 
     public void addReview(Review review){
         reviews.add(review);
@@ -115,40 +57,14 @@ public class Movie {
         for(Review r:reviews){
             avg_rating *= r.getRating();
         }
-        this.rating = avg_rating / reviews.size();
+        double average = avg_rating / reviews.size();
+        BigDecimal roundedAverage = new BigDecimal(average).setScale(1, RoundingMode.HALF_UP);
+        this.rating = roundedAverage.doubleValue();
     }
 
     public void removeReview(Review review){
         reviews.remove(review);
     }
-
-    /*public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public void setReleaseDate(int releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
-    }*/
 
     @Override
     public boolean equals(Object o){
@@ -158,5 +74,21 @@ public class Movie {
             return false;
         Movie m = (Movie) o;
         return Objects.equals(this.title, m.title) && Objects.equals(this.director, m.director);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category=" + category +
+                ", summary='" + summary + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", rating=" + rating +
+                ", director='" + director + '\'' +
+                ", actors=" + actors +
+                ", reviews=" + reviews +
+                '}';
     }
 }

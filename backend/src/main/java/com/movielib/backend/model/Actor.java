@@ -1,44 +1,39 @@
 package com.movielib.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "actors")
 public class Actor {
 
     @Id
-    @SequenceGenerator(
-            name = "actor_sequence",
-            sequenceName = "actor_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "actor_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "actor_id")
     private long id;
-    @Column(name = "name")
     private String name;
-
-    public Actor(long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Actor() {
-    }
+    @ManyToMany(mappedBy = "actors")
+    private List<Movie> movies = new ArrayList<>();
 
     public Actor(String name) {
         this.name = name;
+    }
+
+    public void addMovie(Movie movie) {
+        movies.add(movie);
+    }
+
+    public void removeMovie(Movie movie) {
+        movies.remove(movie);
     }
 
     @Override
@@ -49,5 +44,10 @@ public class Actor {
             return false;
         Actor a = (Actor) o;
         return Objects.equals(this.name, a.name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

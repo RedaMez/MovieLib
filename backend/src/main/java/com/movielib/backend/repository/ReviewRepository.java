@@ -11,7 +11,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAllByMovieId(Long movie_id);
 
-    List<Review> findAllByUserId(Long user_id);
+    List<Review> findReviewsByUserEntity_UsernameContainsIgnoreCase(String user);
 
 
 }

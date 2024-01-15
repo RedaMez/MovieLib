@@ -1,9 +1,6 @@
 package com.movielib.backend.repository;
 
-import com.movielib.backend.model.Actor;
-import com.movielib.backend.model.Category;
-import com.movielib.backend.model.Movie;
-import com.movielib.backend.model.Review;
+import com.movielib.backend.model.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,9 +139,9 @@ public class MovieRepositoryTest extends Assertions {
 
         movieRepository.save(movie);
 
-        Optional<Movie> optionalMovie = movieRepository.findMovieByTitle(movie.getTitle());
+        List<Movie> movieList = movieRepository.findMoviesByTitle(movie.getTitle());
 
-        assertThat(optionalMovie).isNotNull();
+        assertThat(movieList.size()).isEqualTo(1);
     }
 
     @Test
@@ -260,8 +257,24 @@ public class MovieRepositoryTest extends Assertions {
                 .reviews(new ArrayList<>())
                 .build();
 
-        movie1.addReview(Review.builder().userId(1).movieId(movie1.getId()).rating(9.).comment("amazing!").build());
-        movie2.addReview(Review.builder().userId(1).movieId(movie2.getId()).rating(2.5).comment("awful!").build());
+        UserEntity u = UserEntity.builder()
+                .username("username")
+                .email("eeeeeee")
+                .password("ppppppp")
+                .build();
+
+        movie1.addReview(Review.builder()
+                .userEntity(u)
+                .movie(movie1)
+                .rating(9.)
+                .comment("amazing!")
+                .build());
+        movie2.addReview(Review.builder()
+                .userEntity(u)
+                .movie(movie2)
+                .rating(2.5)
+                .comment("awful!")
+                .build());
 
         movieRepository.save(movie1);
         movieRepository.save(movie2);
