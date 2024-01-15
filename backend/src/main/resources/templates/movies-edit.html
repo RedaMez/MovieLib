@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Edit</title>
+</head>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+  <section layout:fragment="body" class="py-5">
+    <div class="container">
+      <form role="form" method="post"  th:action="@{/movies/{movieId}/edit(movieId=${movie.id})}" th:object="${movie}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{rating}">
+<!--        <input type="hidden" th:field="*{reviews}">-->
+        <div th:each="review, iterStat : *{reviews}">
+          <input type="hidden" th:field="*{reviews[__${iterStat.index}__].id}" />
+          <input type="hidden" th:field="*{reviews[__${iterStat.index}__].user.username}" />
+          <input type="hidden" th:field="*{reviews[__${iterStat.index}__].rating}" />
+          <input type="hidden" th:field="*{reviews[__${iterStat.index}__].comment}" />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="title">Title</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    th:field="*{title}"
+                    placeholder="Title">
+            <p th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}"></p>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="imageUrl">Image Url</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="imageUrl"
+                    name="imageUrl"
+                    th:field="*{imageUrl}"
+                    placeholder="https://...">
+            <p th:if="${#fields.hasErrors('imageUrl')}" class="text-danger" th:errors="*{imageUrl}"></p>
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="category">Category</label>
+          <input
+                  type="text"
+                  class="form-control"
+                  id="category"
+                  name="category"
+                  th:field="*{category}"
+                  placeholder="Action / Horror / Drama / ...">
+          <p th:if="${#fields.hasErrors('category')}" class="text-danger" th:errors="*{category}"></p>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="summary">Summary</label>
+          <textarea
+                  type="text"
+                  class="form-control"
+                  id="summary"
+                  name="summary"
+                  th:field="*{summary}"
+                  placeholder="Once upon a time ..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="releaseDate">Release Date</label>
+            <input
+                    type="number"
+                    min="1900"
+                    max="2023"
+                    class="form-control"
+                    id="releaseDate"
+                    name="releaseDate"
+                    th:field="*{releaseDate}"
+                    value="2023">
+            <p th:if="${#fields.hasErrors('releaseDate')}" class="text-danger" th:errors="*{releaseDate}"></p>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="director">Director</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="director"
+                    name="director"
+                    th:field="*{director}"
+                    placeholder="Full name">
+            <p th:if="${#fields.hasErrors('director')}" class="text-danger" th:errors="*{director}"></p>
+          </div>
+          <div class="form-group col-md-6 mb-2" th:each="actor, iterStat : *{actors}">
+            <label th:for="'actor' + (${iterStat.index} + 1)" th:text="'Actor ' + (${iterStat.index} + 1)"></label>
+            <input type="text"
+                   class="form-control"
+                   th:id="'actor' + (${iterStat.index} + 1)"
+                   th:name="'actor' + (${iterStat.index} + 1)"
+                   th:field="*{actors[__${iterStat.index}__]}"
+                   th:placeholder="'Actor ' + (${iterStat.index} + 1) + ' Full name'"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Movie</button>
+      </form>
+    </div>
+  </section>
+</main>
+</body>
+</html>

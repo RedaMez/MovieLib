@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Reviews</title>
+</head>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+  <section layout:fragment="body" class="py-5">
+    <div class="container px-5 my-5">
+      <div class="text-center mb-5">
+        <h1 class="fw-bolder">Reviews</h1>
+        <p class="lead fw-normal text-muted mb-0">See all users reviews</p>
+      </div>
+      <div class="row gx-5">
+        <div>
+          <form th:action="@{/reviews/search}" class="form-inline my-2 my-lg-0 mb-2">
+            <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="Enter a username or a movie" aria-label="Search">
+          </form>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div th:each="review : ${reviews}" class="card mb-4">
+              <div class="card-body">
+                <div class="small text-muted" th:text="${review.user.username}"></div>
+                <h2 class="card-title h4" th:text="${review.movie}"></h2>
+                <h2 class="card-title h4" th:text="${review.rating}"></h2>
+                <p class="card-text" th:text="${review.comment}"></p>
+                <a class="btn btn-primary" th:href="@{/reviews/{reviewId}(reviewId=${review.id})}">View</a>
+                <a class="btn btn-primary" th:href="@{/reviews/{reviewId}/edit(reviewId=${review.id})}">Edit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
